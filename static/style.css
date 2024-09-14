@@ -6,6 +6,7 @@ body {
     color: #FFFFFF;
     background-color: #F7F7F7;
     text-align: center;
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Background Video */
@@ -28,6 +29,7 @@ body {
     align-items: center;
     position: relative;
     padding-right: 20%; /* To leave space for icons */
+    flex-wrap: wrap; /* Allow wrapping of title to avoid overlap */
 }
 
 .header h1 {
@@ -48,7 +50,7 @@ body {
 }
 
 .top-right-icons i {
-    font-size: 2vw; /* Reduced icon size */
+    font-size: 2vw; /* Adjusted icon size */
     color: #FFFFFF;
     cursor: pointer;
 }
@@ -62,8 +64,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 120px);
+    height: auto; /* Allow content to expand and adjust height */
     margin: 0 20px;
+    padding-bottom: 40px; /* Add some bottom padding for scroll space */
 }
 
 .container {
@@ -75,6 +78,7 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     border: 3px solid #2F4F7F;
     box-sizing: border-box; /* Ensures padding is included in width calculation */
+    margin-top: 20px; /* Add space between title and display box */
 }
 
 /* Form Styles */
