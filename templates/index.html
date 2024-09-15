@@ -28,11 +28,16 @@
                     <div class="input-container">
                         <div class="input-box">
                             <label for="station_no">Station No:</label>
-                            <input type="number" id="station_no" name="station_no" required>
+                            <select id="station_no" name="station_no" required>
+                                <option value="" disabled selected>Select Station No</option>
+                                {% for station in station_numbers %}
+                                    <option value="{{ station }}">{{ station }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="input-box">
                             <label for="flow_rate">Flow Rate (lpm):</label>
-                            <input type="number" id="flow_rate" name="flow_rate" required>
+                            <input type="number" id="flow_rate" name="flow_rate" step="any" required>
                         </div>
                     </div>
                     <div class="submit-box">
@@ -45,8 +50,11 @@
                 {% if station_name %}
                     <h2>Station Name: <span>{{ station_name }}</span></h2>
                     <h2>TDS Level: <span>{{ tds_level }} mg/L</span></h2>
-                    <h2>Predicted Water Depth: <span>{{ water_depth }} meters</span></h2>
-                    <!-- Applying dynamic class based on flow_state -->
+                    {% if flow_state == "Water above the ground level" %}
+                        <h2>Water Status: <span>Overflow ({{ water_depth }} mm)</span></h2>
+                    {% else %}
+                        <h2>Predicted Water Depth: <span>{{ water_depth }} meters</span></h2>
+                    {% endif %}
                     <h2 class="flow-state {{ flow_state|lower }}">Flow State: <span>{{ flow_state }}</span></h2>
                 {% endif %}
                 {% if error %}
@@ -57,3 +65,4 @@
     </div>
 </body>
 </html>
+
