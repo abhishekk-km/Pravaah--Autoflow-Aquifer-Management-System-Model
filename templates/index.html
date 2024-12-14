@@ -3,18 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRAVAAH - Acquifer Management System</title>
+    <title>Aquifer System Sensor Data</title>
     <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="static/Hstyle.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <!-- Google Translate Script -->
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- Initialize Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+             pageLanguage: 'en',  // Default page language
+             includedLanguages: 'en,hi',  // Languages available for translation (English, Hindi)
+             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,  // Simple layout for the language selector
+             autoDisplay: false  // User needs to select the language
+         }, 'google_translate_element');
+     }
+ </script>
+
 </head>
 <body>
     <div class="header">
-        <h1>PRAVAAH : ACQUIFER MANAGEMENT SYSTEM</h1>
-        <div class="top-right-icons">
-            <i class="fas fa-home" onclick="window.location.href='https://pravaah.framer.website/home'" title="Home"></i>
-            <i class="fas fa-info-circle" onclick="window.location.href='https://triumphant-rectangle-155838.framer.app/page'" title="Info"></i>
-            <i class="fas fa-sync-alt" onclick="window.location.reload()" title="Reload"></i>
+        <!-- Navigation Bar -->
+        <div class="navbar">
+        <div class="menu-icon" id="menu-icon">&#9776;</div>
+        <a href="index.html">
+        <span class="website-name">PARVAAH</span>
+        </a>
+   
+        <!-- Display Current Day, Date, and Time -->
+        <div class="profile-icon" id="profile-icon">
+            <div>
+                <a href="dailydata.html">
+                    <span class="navtag">DAILY-DATA</span>
+                </a>
+                <a href="dailydata.html">
+                    <span class="navtag">HISTORICAL-DATA</span>
+                </a>
+                <a href="map.html">
+                    <span class="navtag">LOCATION</span>
+                </a>
+            </div>
+        <div class="current-time" id="current-time">
+            <div class="datetime">
+                <div class="date"></div>
+                <div class="time"></div>
+            </div>
         </div>
+        
+            <i class="fa fa-user-circle" aria-hidden="true" style="color: white; margin-top: 10px;"></i>
+         </div>
+    </div >
+</div>
+
+<!-- Left Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="close-btn" id="close-btn">&times;</div>
+    <ul>
+        <li><a href="#home.html">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#footer">Contact</a></li>
+        <li><a href="map.html">Location</a></li>
+        <div class="response">  <li><a href="dailydata.html">Daily Data</a></li>
+            <li><a href="dailydata.html">Historical Data</a></li>
+        </div>
+
+    </ul>
+</div>
+
+<!-- Right Sidebar (Profile Section) -->
+<div class="profile-sidebar" id="profile-sidebar">
+    <div class="close-btn" id="profile-close-btn">&times;</div>
+    <h2>Profile</h2>
+
+</div>
+
     </div>
 
     <div class="content">
@@ -44,8 +108,8 @@
 
             <div class="result-container">
                 {% if station_name %}
-                    <h2>Station Name: <span>{{ station_name }}</span></h2>
-                    <h2>TDS Level: <span>{{ tds_level }} mg/L</span></h2>
+                    <h3>Station Name: <span>{{ station_name }}</span></h3>
+                    <h3>TDS Level: <span>{{ tds_level }} mg/L</span></h3>
                     {% if flow_state == "Water above the ground level" %}
                         <h2>Water Status: <span>Overflow ({{ water_depth }} mm)</span></h2>
                     {% else %}
@@ -61,5 +125,3 @@
     </div>
 </body>
 </html>
-
-
