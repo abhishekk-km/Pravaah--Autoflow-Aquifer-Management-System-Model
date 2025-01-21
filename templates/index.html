@@ -1,36 +1,240 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aquifer System Sensor Data</title>
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/Hstyle.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- <!-- Google Translate Script -->
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <title>PARIVARTAN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #d9f2fa;
+        }
+        .header {
+            background-color: #0288d1;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        .header h2 {
+            margin: 5px 0 0;
+            font-size: 1rem;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #e1f5fe;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0288d1;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0277bd;
+        }
+        .result {
+            background: #b3e5fc;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .flow-state {
+            font-weight: bold;
+        }
+        .flow-state.underflow {
+            color: red;
+        }
+        .flow-state.overflow {
+            color: blue;
+        }
+        .flow-state.moderate {
+            color: green;
+        }
+        /* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.954);
+    padding: 10px 20px;
+    z-index: 2;
+}
+.navbar a{
+    text-decoration: none;
+}
+.navbar .navtag{
+    color: white;
+    font-size: 15px;
+    margin-right: 8px;
+    z-index: 5;
+}
 
-    <!-- Initialize Google Translate -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-             pageLanguage: 'en',  // Default page language
-             includedLanguages: 'en,hi',  // Languages available for translation (English, Hindi)
-             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,  // Simple layout for the language selector
-             autoDisplay: false  // User needs to select the language
-         }, 'google_translate_element');
-     }
- </script>
+.current-time {
+    font-size: 16px;
+    color: #fff; 
+    margin: 0 15px;
+    display: inline-block;
+    text-align: center; 
+}
+/* #google_translate_element{
+    margin-top: 50PX;
+} */
+.daydate{
+    display: flex;
+    flex-direction: column;
+}
+.day {
+    font-weight: bold;
+    font-size: 18px;
+}
 
+.date {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.website-name {
+    font-size: 30px;
+    color: #fff;
+    margin-left: 10px;
+}
+
+/* Profile Icon */
+.profile-icon {
+    font-size: 30px;
+    cursor: pointer;
+    color: #070303 !important;
+    position: fixed;  /* Ensure fixed position */
+    top: 10px;        /* Distance from top */
+    right: 10px;      /* Distance from right edge */
+    z-index: 4;       
+    display: flex;
+}
+
+/* Left Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 230px;
+    height: 95%;
+    background: rgba(0, 0, 0, 0.692);
+    padding: 20px;
+    transition: left 0.3s ease;
+    z-index: 3;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar .close-btn {
+    font-size: 30px;
+    color: #fff;
+    cursor: pointer;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Right Sidebar (Profile Section) */
+.profile-sidebar {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 230px;
+    height: 95%;
+    background: rgba(0, 0, 0, 0.808);
+    padding: 20px;
+    transition: right 0.3s ease;
+    z-index: 3;
+}
+
+.profile-sidebar.active {
+    right: 0;
+}
+
+.profile-sidebar .close-btn {
+    font-size: 30px;
+    color: #fff;
+    cursor: pointer;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.profile-sidebar h2 {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.profile-sidebar p {
+    color: #fff;
+    line-height: 22px;
+    font-size: 15px;
+    text-align: left;
+}
+    </style>
 </head>
 <body>
-    <div class="header">
-        <!-- Navigation Bar -->
-        <div class="navbar">
-        <div class="menu-icon" id="menu-icon">&#9776;</div>
-        <a href="index.html">
-        <span class="website-name">PARVAAH</span>
-        </a>
+    <!-- Navigation Bar -->
+<div class="navbar">
+    <div class="menu-icon" id="menu-icon">&#9776;</div>
+    <a href="home.html">
+        <span class="website-name">PARIVARTAN</span>
+    </a>
    
         <!-- Display Current Day, Date, and Time -->
         <div class="profile-icon" id="profile-icon">
@@ -43,6 +247,9 @@
                 </a>
                 <a href="map.html">
                     <span class="navtag">LOCATION</span>
+                </a>
+                <a href="https://pravaah-autoflow-aquifer-management.onrender.com/">
+                    <span class="navtag">PREDICTIVE ANALYSIS</span>
                 </a>
             </div>
         <div class="current-time" id="current-time">
@@ -78,50 +285,62 @@
     <h2>Profile</h2>
 
 </div>
-
+    <div class="header" style="margin-top: 50px">
+        <h1>PARIVARTAN</h1>
+        <h2>Program for Aquatic Resource Improvement using AI for Recycling and Treatment Across NCT Delhi</h2>
     </div>
+    <div class="container">
+        <form id="prediction-form">
+            <label for="station-no">Station No:</label>
+            <select id="station-no" name="station_no" required>
+                <option value="">Select Station</option>
+                {% for key, value in stations.items() %}
+                <option value="{{ key }}">{{ key }} - {{ value.name }}</option>
+                {% endfor %}
+            </select>
 
-    <div class="content">
-        <div class="container">
-            <form action="/" method="post">
-                <div class="form-container">
-                    <div class="input-container">
-                        <div class="input-box">
-                            <label for="station_no">Station No:</label>
-                            <select id="station_no" name="station_no" required>
-                                <option value="" disabled selected>Select Station No</option>
-                                {% for station in station_numbers %}
-                                    <option value="{{ station }}">{{ station }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="input-box">
-                            <label for="flow_rate">Flow Rate (lpm):</label>
-                            <input type="number" id="flow_rate" name="flow_rate" step="any" required>
-                        </div>
-                    </div>
-                    <div class="submit-box">
-                        <input type="submit" value="Predict">
-                    </div>
-                </div>
-            </form>
+            <label for="rainfall">Rainfall (mm):</label>
+            <input type="number" id="rainfall" name="rainfall" step="0.01" required />
 
-            <div class="result-container">
-                {% if station_name %}
-                    <h3>Station Name: <span>{{ station_name }}</span></h3>
-                    <h3>TDS Level: <span>{{ tds_level }} mg/L</span></h3>
-                    {% if flow_state == "Water above the ground level" %}
-                        <h2>Water Status: <span>Overflow ({{ water_depth }} mm)</span></h2>
-                    {% else %}
-                        <h2>Predicted Water Depth: <span>{{ water_depth }} meters</span></h2>
-                    {% endif %}
-                    <h2 class="flow-state {{ flow_state|lower }}">Flow State: <span>{{ flow_state }}</span></h2>
-                {% endif %}
-                {% if error %}
-                    <h2 style="color:red;">Error: {{ error }}</h2>
-                {% endif %}
-            </div>
+            <button type="submit">Predict</button>
+        </form>
+
+        <div class="result" id="result" style="display: none;">
+            <p><strong>Station Name:</strong> <span id="station-name"></span></p>
+            <p><strong>TDS Level:</strong> <span id="tds-level"></span> mg/L</p>
+            <p><strong>Predicted Water Depth:</strong> <span id="predicted-depth"></span> meters</p>
+            <p><strong>Ground Water Health Status:</strong> <span id="flow-state" class="flow-state"></span></p>
         </div>
     </div>
+
+    <script>
+        document.getElementById("prediction-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const stationNo = document.getElementById("station-no").value;
+            const rainfall = document.getElementById("rainfall").value;
+
+            fetch("/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ station_no: stationNo, rainfall: rainfall })
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    document.getElementById("station-name").textContent = data.station_name;
+                    document.getElementById("tds-level").textContent = data.tds_level;
+                    document.getElementById("predicted-depth").textContent = data.predicted_depth.toFixed(2);
+                    const flowStateElement = document.getElementById("flow-state");
+                    flowStateElement.textContent = data.flow_state;
+                    flowStateElement.className = `flow-state ${data.flow_state.toLowerCase()}`;
+                    document.getElementById("result").style.display = "block";
+                })
+                .catch((error) => console.error("Error:", error));
+        });
+    </script>
 </body>
 </html>
+
