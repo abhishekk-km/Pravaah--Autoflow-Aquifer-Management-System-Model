@@ -1,80 +1,55 @@
-from flask import Flask, render_template, request
-import pandas as pd
-import numpy as np
-import pickle
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-# Load the dataset
-df = pd.read_csv('data/b1.csv')
+# Station data with names and TDS levels for stations 1001 to 1012
+stations = {
+    "1001": {"name": "Alipur", "tds": 250.5},
+    "1002": {"name": "Civil Lines", "tds": 751.0},
+    "1003": {"name": "Defence Colony", "tds": 451.5},
+    "1004": {"name": "Dwarka", "tds": 952.0},
+    "1005": {"name": "Karol Bagh", "tds": 352.5},
+    "1006": {"name": "Mehrauli", "tds": 753.0},
+    "1007": {"name": "Najafgarh", "tds": 593.5},
+    "1008": {"name": "Narela", "tds": 254.0},
+    "1009": {"name": "New Delhi", "tds": 254.5},
+    "1010": {"name": "Paharganj", "tds": 585.0},
+    "1011": {"name": "Rohini", "tds": 255.5},
+    "1012": {"name": "Shahdara", "tds": 856.0},
+}
 
-# Load the pre-trained model
-with open('model/water_level_predictor.pkl', 'rb') as f:
-    model = pickle.load(f)
-
-# Extract unique station numbers for the dropdown
-station_numbers = df['station_no'].unique()
-
-# Helper function to get station info
-def get_station_info(station_no):
-    station = df[df['station_no'] == station_no]
-    if station.empty:
-        return None, None
-    tds_level = station['TDS(mg/L)'].values[0]
-    station_name = station['station_name'].values[0]
-    return tds_level, station_name
-
-# Helper function to predict water level and flow state using user-provided flow rate
-def predict_flow(flow_rate, tds_level):
-    features = np.array([[flow_rate, tds_level]])  # Use user-provided flow rate and TDS level
-    predicted_depth = model.predict(features)[0]
-
-    # Handling negative predicted depth values
-    if predicted_depth < 0:
-        # Logarithmic transformation for negative depth values
-        predicted_depth_log = np.log10(abs(predicted_depth)) / np.log10(100)
-        flow_state = "Water above the ground level"
-        return predicted_depth_log, flow_state
-    
-    if predicted_depth < 2:
-        flow_state = "Overflow"
-    elif 2 <= predicted_depth <= 25:
-        flow_state = "Moderate Flow"
+# Function to predict water depth based on rainfall (in mm)
+def predict_water_depth(rainfall):
+    if rainfall > 10:
+        return 0, "Overflow"
+    depth = 25 - (2 * rainfall)
+    if depth <= 5:
+        state = "Underflow"
     else:
-        flow_state = "Underflow"
-    
-    return predicted_depth, flow_state
+        state = "Moderate"
+    return depth, state
 
-# Home route
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/")
 def home():
-    if request.method == 'POST':
-        try:
-            # Get the station number input
-            station_no = int(request.form.get('station_no'))
-        except ValueError:
-            return render_template('index.html', station_numbers=station_numbers, error="Please select a valid station number.")
-        
-        try:
-            # Get the flow rate input from the user
-            flow_rate = float(request.form.get('flow_rate'))
-        except ValueError:
-            return render_template('index.html', station_numbers=station_numbers, error="Please enter a valid flow rate.")
-        
-        # Get the TDS level and station name based on the selected station number
-        tds_level, station_name = get_station_info(station_no)
-        if station_name is None:
-            return render_template('index.html', station_numbers=station_numbers, error="Invalid station number")
-        
-        # Predict water depth and flow state using user input for flow rate and the station's TDS level
-        water_depth, flow_state = predict_flow(flow_rate, tds_level)
+    return render_template("index.html", stations=stations)
 
-        # Render the result with the predicted values
-        return render_template('index.html', station_numbers=station_numbers, station_name=station_name, tds_level=tds_level, water_depth=water_depth, flow_state=flow_state)
-    
-    # On a GET request, render the form without any results
-    return render_template('index.html', station_numbers=station_numbers)
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        # Extract rainfall and station number from form data
+        station_no = request.form["station_no"]
+        rainfall = float(request.form["rainfall"])
+        station = stations.get(station_no, {})
+        depth, state = predict_water_depth(rainfall)
+        response = {
+            "station_name": station.get("name", "Unknown Station"),
+            "tds_level": station.get("tds", "N/A"),
+            "predicted_depth": depth,
+            "flow_state": state
+        }
+        return jsonify(response)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
-
